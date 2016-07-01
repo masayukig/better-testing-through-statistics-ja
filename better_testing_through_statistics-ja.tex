@@ -30,6 +30,9 @@
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 
+\usepackage{CJK}
+%\pdfmapline{=genshingothic@Unicode@ <genshingothic.ttf}
+
 \lstset{%
   backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
   breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
@@ -70,6 +73,8 @@
 \hspace{2em}\insertframenumber/\inserttotalframenumber]{OpenStack Upstream開発におけるCI品質向上施策}
 
 \begin{document}
+%\begin{CJK*}{UTF8}{genshingothic}
+
 
 {%
 \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{background_title.png}}
@@ -96,10 +101,15 @@
         \item OpenStack開発の概要
         \item ``OpenStackゲート''とは？
         \item 問題点・課題・困った点
-        \item 解決方法（利用・開発したツールなど）
+          \begin{itemize}
+            \item 大量のログの中から目的のものを見つける必要あり
+            \item 大量のテスト実行結果を俯瞰的に確認したい（パフォーマンス低下・向上の検出）
+          \end{itemize}
+        \item 解決方法（利用・開発したツール）
           \begin{itemize}
             \item Logstash と elastic-recheck
             \item openstack-health/subunit2sqlを用いた解析
+            \item stackviz
           \end{itemize}
         \item 結果
         \item どのような成果・改善が得られたのか？
@@ -108,14 +118,14 @@
     \end{itemize}
 \end{frame}
 
-\section{自己紹介}
+\section{Introduction}
 \begin{frame}
     \frametitle{自己紹介}
     \begin{itemize}
         \item 日本ヒューレット・パッカード株式会社
           \begin{itemize}
             \item Hewlett Packard Enterprise \- OpenStack アップストリーム開発チーム所属
-            \item チームメンバー日本人は私だけ!
+            \item チームメンバー日本人は私だけ。日本にいるのも私だけ。 \\o/
           \end{itemize}
         \item OpenStack QA 領域でアップストリーム活動実施中
           \begin{itemize}
@@ -126,7 +136,7 @@
     \end{itemize}
 \end{frame}
 
-\section{OpenStack開発の概要}
+\section{Overview of OpenStack development}
 \begin{frame}
     \frametitle{OpenStack開発の概要}
     \begin{itemize}
@@ -313,4 +323,5 @@
 \frametitle{Questions?}
 \end{frame}
 
+%\end{CJK*}{UTF8}{genshingothic}
 \end{document}

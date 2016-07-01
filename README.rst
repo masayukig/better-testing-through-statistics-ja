@@ -1,7 +1,6 @@
-# better_testing_through_statistics
-=================================
-Better Testing Through Statistics
-=================================
+======================================
+OpenStack Upstream開発におけるCI品質向上施策
+======================================
 
 Built with beamer latex
 
