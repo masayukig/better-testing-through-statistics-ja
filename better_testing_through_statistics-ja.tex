@@ -1,4 +1,5 @@
 \documentclass[aspectratio=169,11pt,hyperref={colorlinks=true}]{beamer}
+\usepackage[whole]{bxcjkjatype}
 \usetheme{boxes}
 \setbeamertemplate{navigation symbols}{}
 \definecolor{openstack}{RGB}{149,0,4}
@@ -54,27 +55,19 @@
 \setlength{\abovecaptionskip}{0pt}
 \setlength{\floatsep}{0pt}
 
-\author[Matthew Treinish & Masayuki Igawa]{%
+\author[Masayuki Igawa]{%
     \texorpdfstring{%
-        \begin{columns}
-            \column{.45\linewidth}
-            \centering
-            Matthew Treinish\\
-            \href{mailto:mtreinish@kortar.org}{mtreinish@kortar.org}\\
-        \texttt{mtreinish on Freenode}
-        \column{.45\linewidth}
-            \centering
-            Masayuki Igawa\\
-            \href{mailto:masayuki.igawa@gmail.com}{masayuki.igawa@gmail.com}\\
-            \texttt{masayukig on Freenode}
-        \end{columns}
-        }
-    {Matthew Treinish & Masayuki Igawa}
+        \centering
+        Masayuki Igawa\\
+        \href{mailto:masayuki.igawa@gmail.com}{masayuki.igawa@gmail.com}\\
+        \texttt{masayukig on Freenode}
+    }
+    {Masayuki Igawa}
 }
-\date{July 13, 2016}
+\date{July 7, 2016}
 
-\title[Better Testing Through Statistics
-\hspace{2em}\insertframenumber/\inserttotalframenumber]{Better Testing Through Statistics}
+\title[OpenStack Upstream開発におけるCI品質向上施策
+\hspace{2em}\insertframenumber/\inserttotalframenumber]{OpenStack Upstream開発におけるCI品質向上施策}
 
 \begin{document}
 
@@ -91,13 +84,61 @@
     \setbeamercolor{background}{bg=openstack}
     \titlepage{}
     \centering
-    \href{https://github.com/masayukig/better-testing-through-statistics}{https://github.com/masayukig/better-testing-through-statistics}
+    \href{https://github.com/masayukig/better-testing-through-statistics-ja}{https://github.com/masayukig/better-testing-through-statistics-ja}
 \end{frame}
 }
 
-\section{What is \"the OpenStack Gate\"?}
+\section{Agenda}
 \begin{frame}
-    \frametitle{What is \"the OpenStack Gate\"?}
+    \frametitle{Agenda}
+    \begin{itemize}
+        \item 自己紹介
+        \item OpenStack開発の概要
+        \item ``OpenStackゲート''とは？
+        \item 問題点・課題・困った点
+        \item 解決方法（利用・開発したツールなど）
+          \begin{itemize}
+            \item Logstash と elastic-recheck
+            \item openstack-health/subunit2sqlを用いた解析
+          \end{itemize}
+        \item 結果
+        \item どのような成果・改善が得られたのか？
+        \item 今後の課題
+        \item 質疑応答
+    \end{itemize}
+\end{frame}
+
+\section{自己紹介}
+\begin{frame}
+    \frametitle{自己紹介}
+    \begin{itemize}
+        \item 日本ヒューレット・パッカード株式会社
+          \begin{itemize}
+            \item Hewlett Packard Enterprise \- OpenStack アップストリーム開発チーム所属
+            \item チームメンバー日本人は私だけ!
+          \end{itemize}
+        \item OpenStack QA 領域でアップストリーム活動実施中
+          \begin{itemize}
+            \item Tempest, OpenStack-Health, Subunit2SQL, Stackviz等のコアメンバ
+          \end{itemize}
+        \item \href{https://twitter.com/masayukig}{Twitter:@masayukig},
+          \href{https://github.com/masayukig}{github.com/masayukig}
+    \end{itemize}
+\end{frame}
+
+\section{OpenStack開発の概要}
+\begin{frame}
+    \frametitle{OpenStack開発の概要}
+    \begin{itemize}
+        \item ６ヶ月毎のリリース (\ldots Liberty, Mitaka, Newton, Ocata,\ldots)
+            \item \href{http://governance.openstack.org/reference/release-naming.html}{http://governance.openstack.org/reference/release-naming.html}
+        \item
+    \end{itemize}
+\end{frame}
+
+\section{What is ``the OpenStack Gate''?}
+\begin{frame}
+    \frametitle{What is ``the OpenStack Gate''?}
 	\begin{center}
 		\includegraphics[width=.65\textwidth]{code_review.png}
 	\end{center}
@@ -179,9 +220,9 @@
 \begin{frame}
     \frametitle{Elastic Recheck}
     \begin{itemize}
-        \item Designed to answer the question "Have you seen this recently?"
+        \item Designed to answer the question ``Have you seen this recently?''
         \item \href{http://status.openstack.org/elastic-recheck/}{http://status.openstack.org/elastic-recheck/}
-        \item 
+        \item
     \end{itemize}
 \end{frame}
 
@@ -202,7 +243,7 @@
         \item Provides a DB schema and a python API for interacting with the
               database
         \item Used to the results from test runs for 6 months
-        \item 
+        \item
     \end{itemize}
 \end{frame}
 
@@ -233,7 +274,7 @@
 \begin{frame}
     \frametitle{What did we get/improve?}
     \begin{itemize}
-        \item 
+        \item
     \end{itemize}
 \end{frame}
 
@@ -243,7 +284,7 @@
     \frametitle{Issues}
     \begin{itemize}
         \item Too many varied data sources each with unique limitations
-        \item 
+        \item
     \end{itemize}
 \end{frame}
 
@@ -251,7 +292,7 @@
     \frametitle{Future work}
     \begin{itemize}
         \item Integrate all the things in openstack-health
-        \item 
+        \item
     \end{itemize}
 \end{frame}
 
