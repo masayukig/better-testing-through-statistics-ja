@@ -15,6 +15,9 @@
 \usepackage{listings}
 % Color stuff
 \usepackage{color}
+% underline
+\usepackage{soul}
+
 \usepackage{amsmath}
 \usepackage{tikz}
 \newcommand\RBox[1]{%
@@ -25,12 +28,15 @@
 %\usecolortheme{wolverine}
 %\usetheme{Boadilla}
 \usepackage[T1]{fontenc}
+%\usepackage{fontspec}
+%\setmainsfont{hiragino-elcapitan}
+%\usepackage[expert, deluxe]{otf}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 
-\usepackage{CJK}
+%\usepackage{CJK}
 %\pdfmapline{=genshingothic@Unicode@ <genshingothic.ttf}
 
 \lstset{%
@@ -63,7 +69,9 @@
         \centering
         Masayuki Igawa\\
         \href{mailto:masayuki.igawa@gmail.com}{masayuki.igawa@gmail.com}\\
-        \texttt{masayukig on Freenode}
+        \texttt{masayukig on Freenode,
+         \href{https://twitter.com/masayukig}{Twitter},
+         \href{https://github.com/masayukig}{GitHub}}
     }
     {Masayuki Igawa}
 }
@@ -73,6 +81,7 @@
 \hspace{2em}\insertframenumber/\inserttotalframenumber]{OpenStack Upstream開発におけるCI品質向上施策}
 
 \begin{document}
+%\begin{CJK*}{UTF8}{hiragino-elcapitan}
 %\begin{CJK*}{UTF8}{genshingothic}
 
 
@@ -80,60 +89,71 @@
 \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{background_title.png}}
 \setbeamertemplate{footline}{}
 \begin{frame}[noframenumbering]
-    \setbeamercolor{titlelike}{fg=white}
-    \setbeamercolor{structure}{fg=white}
-    \setbeamercolor{normal text}{fg=white}
-    \hypersetup{colorlinks,urlcolor=white}
-    \setbeamercolor{author}{fg=white}
-    \setbeamercolor{date}{fg=white}
-    \setbeamercolor{background}{bg=openstack}
-    \titlepage{}
-    \centering
-    \href{https://github.com/masayukig/better-testing-through-statistics-ja}{https://github.com/masayukig/better-testing-through-statistics-ja}
+  \setbeamercolor{titlelike}{fg=white}
+  \setbeamercolor{structure}{fg=white}
+  \setbeamercolor{normal text}{fg=white}
+  \hypersetup{colorlinks,urlcolor=white}
+  \setbeamercolor{author}{fg=white}
+  \setbeamercolor{date}{fg=white}
+  \setbeamercolor{background}{bg=openstack}
+  \titlepage{}
+  \centering
+  \href{https://github.com/masayukig/better-testing-through-statistics-ja}{github.com/masayukig/better-testing-through-statistics-ja}
 \end{frame}
 }
 
 \section{Agenda}
 \begin{frame}
-    \frametitle{Agenda}
-    \begin{itemize}
-        \item 自己紹介
-        \item OpenStack開発の概要
-        \item ``OpenStackゲート''とは？
-        \item 問題点・課題・困った点
-          \begin{itemize}
-            \item 大量のログの中から目的のものを見つける必要あり
-            \item 大量のテスト実行結果を俯瞰的に確認したい（パフォーマンス低下・向上の検出）
-          \end{itemize}
-        \item 解決方法（利用・開発したツール）
-          \begin{itemize}
-            \item Logstash と elastic-recheck
-            \item openstack-health/subunit2sqlを用いた解析
-            \item stackviz
-          \end{itemize}
-        \item 結果
-        \item どのような成果・改善が得られたのか？
-        \item 今後の課題
-        \item 質疑応答
-    \end{itemize}
+  \frametitle{Agenda}
+  \begin{itemize}
+    \item 自己紹介
+    \item 今日のゴール
+    \item OpenStack開発の概要
+    \item OpenStack QAチームの役割
+    \item ``OpenStackゲート''とは？
+    \item 問題点・課題・困った点
+      \begin{itemize}
+        \item 大量のログの中から目的のものを見つける必要あり
+        \item 大量のテスト実行結果を俯瞰的に確認したい（パフォーマンス低下・向上の検出）
+      \end{itemize}
+    \item 解決方法（利用・開発しているツール）
+      \begin{itemize}
+        \item Logstash と elastic-recheck
+        \item openstack-health/subunit2sqlを用いた解析
+        \item stackviz
+      \end{itemize}
+    \item 結果
+    \item どのような成果・改善が得られたのか？
+    \item 今後の課題
+    \item 質疑応答
+  \end{itemize}
 \end{frame}
 
 \section{Introduction}
 \begin{frame}
-    \frametitle{自己紹介}
-    \begin{itemize}
-        \item 日本ヒューレット・パッカード株式会社
-          \begin{itemize}
-            \item Hewlett Packard Enterprise \- OpenStack アップストリーム開発チーム所属
-            \item チームメンバー日本人は私だけ。日本にいるのも私だけ。 \\o/
-          \end{itemize}
-        \item OpenStack QA 領域でアップストリーム活動実施中
-          \begin{itemize}
-            \item Tempest, OpenStack-Health, Subunit2SQL, Stackviz等のコアメンバ
-          \end{itemize}
-        \item \href{https://twitter.com/masayukig}{Twitter:@masayukig},
-          \href{https://github.com/masayukig}{github.com/masayukig}
-    \end{itemize}
+  \frametitle{自己紹介}
+  \begin{itemize}
+    \item 日本ヒューレット・パッカード株式会社
+      \begin{itemize}
+        \item Hewlett Packard Enterprise/OpenStack アップストリーム開発チーム所属
+        \item メンバー数：20数名
+        \item チームメンバー日本人は私だけ。日本にいるのも私だけ!
+      \end{itemize}
+    \item 業務活動内容：OpenStack QA 領域でアップストリームを通じた開発
+      \begin{itemize}
+        \item Tempest, OpenStack-Health, Subunit2SQL, Stackviz等のコアメンバ (≒ コミッタ?)
+        \item \href{http://stackalytics.com/?user_id=igawa&release=all&metric=all}{stackalytics.com/?user\_id=igawa}
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{今日のゴール}
+  \begin{itemize}
+    \item OpenStackアップストリーム開発概要を理解する
+    \item 利用されているツール・手法を知る
+    \item （できれば）アップストリーム開発に興味を持つ
+  \end{itemize}
 \end{frame}
 
 \section{Overview of OpenStack development}
@@ -141,55 +161,75 @@
     \frametitle{OpenStack開発の概要}
     \begin{itemize}
         \item ６ヶ月毎のリリース (\ldots Liberty, Mitaka, Newton, Ocata,\ldots)
-            \item \href{http://governance.openstack.org/reference/release-naming.html}{http://governance.openstack.org/reference/release-naming.html}
-        \item
+        \item Gate (\href{https://gerrit.openstack.org}{gerrit.openstack.org},
+          \href{http://zuul.openstack.org/}{zuul/Jenkins}\ldots) → 詳細後述
+        \item 参考資料
+          \begin{itemize}
+            \item \href{http://governance.openstack.org/reference/release-naming.html}{governance.openstack.org/reference/release-naming.html}
+            \item \href{http://docs.openstack.org/ja/upstream-training/01-release-cycle.html}{docs.openstack.org/ja/upstream-training/01-release-cycle.html}
+          \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{``OpenStack QAチーム''って何？}
+    \begin{itemize}
+        \item An official OpenStack project team
+        \item \href{https://wiki.openstack.org/wiki/QA}{\ul{Develop, maintain,
+          and initiate tools and plans to ensure the upstream stability
+          and quality of OpenStack, and its release readiness at any point
+          during the release cycle.}}　→ CI/CDできるように整える役割
+        \item １３プロジェクト (2016/7/4現在)
+        \begin{itemize}
+          \item Tempest, DevStack, os-testr, openstack-health, stackviz, Grenade, Hacking, Bashate, etc..
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
 \section{What is ``the OpenStack Gate''?}
 \begin{frame}
-    \frametitle{What is ``the OpenStack Gate''?}
-	\begin{center}
-		\includegraphics[width=.65\textwidth]{code_review.png}
-	\end{center}
+  \frametitle{OpenStackの``Gate''って何？}
+  \begin{center}
+    \includegraphics[width=.65\textwidth]{code_review.png}
+  \end{center}
 \end{frame}
 
 \begin{frame}
-\frametitle{What Happens when you push a change?}
-\begin{center}
-	\includegraphics[width=.7\textwidth]{jobs.png}
-\end{center}
+  \frametitle{１つのパッチを投げると何が起こるのか？}
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{jobs.png}
+  \end{center}
 \end{frame}
 
 \begin{frame}
-\begin{center}
-    \includegraphics[width=.8\textwidth]{ZuulStatus.png}
-\end{center}
+  \begin{center}
+      \includegraphics[width=.8\textwidth]{ZuulStatus.png}
+  \end{center}
 \end{frame}
 
 \begin{frame}
-\frametitle{The Size of the Gate}
+\frametitle{Gateの規模感}
     \begin{columns}[T]
-        \begin{column}{.48\textwidth}
-            \textbf{One Proposed Change Generates:}
-			\begin{itemize}
-				\item 5--25 Devstacks
-				\item \textasciitilde10,000 integration tests (roughly 1.5k per devstack)
-                \item \textasciitilde151 2nd level guests created in each devstack cloud
-                \item \textasciitilde1 GB of logs uncompressed for each run
-			\end{itemize}
-            \textbf{In aggregate:}
-            \begin{itemize}
-                \item \textasciitilde12,500 jobs run in check and gate daily
-                \item \textasciitilde0.01\% individual tempest test failure rate
-                \item \textasciitilde.77\% tempest run failure rate
-            \end{itemize}
-        \end{column}
-        \begin{column}{.48\textwidth}
-            \centering
-            \textbf{Number of Tempest Tests per Day in the Gate Queue:}
-            \includegraphics[width=1.22\textwidth]{tempest-gate-count.png}
-        \end{column}
+      \begin{column}{.50\textwidth}
+        \textbf{１つのパッチで行われること:}
+        \begin{itemize}
+          \item 5--25 Devstacks
+          \item \textasciitilde10,000 integration tests (約1.5k/devstack)
+          \item \textasciitilde151 2ndレベルゲスト生成/devstack
+          \item \textasciitilde1 GBログファイル (非圧縮時)/実行毎
+        \end{itemize}
+        \textbf{合計すると:}
+        \begin{itemize}
+          \item \textasciitilde12,500 ジョブ (check or gate)実行/日
+          \item \textasciitilde0.01\% 個別tempestテスト毎 失敗率
+          \item \textasciitilde.77\% tempest 実行全体 失敗率
+        \end{itemize}
+      \end{column}
+      \begin{column}{.48\textwidth}
+          \centering
+          \textbf{Tempestテスト実行数/日 (GateQ):}
+          \includegraphics[width=1.22\textwidth]{tempest-gate-count.png}
+      \end{column}
     \end{columns}
 \end{frame}
 
@@ -197,131 +237,187 @@
 \begin{frame}
     \frametitle{Log Server}
     \begin{itemize}
-        \item Log Server: \href{http://logs.openstack.org/}{http://logs.openstack.org/}
-        \item Archive of all artifacts from all jobs for \~4 months
+        \item Log Server: \href{http://logs.openstack.org/}{logs.openstack.org}
+        \item 全ジョブの生成物を\textasciitilde4ヶ月保持
 %http://cacti.openstack.org/cacti/graph.php?action=view&local_graph_id=717&rra_id=all
-        \item \~8 TB of data compressed
+        \item \textasciitilde8 TBの圧縮データ
     \end{itemize}
 \end{frame}
 
 \begin{frame}
     \frametitle{Graphite}
     \begin{itemize}
-        \item \href{http://graphite.openstack.org/}{http://graphite.openstack.org/}
-        \item Infra services report to graphite
+        \item \href{http://graphite.openstack.org/}{graphite.openstack.org}
+        \item OpenStack Infra チームが提供
         \item Include job results
-        \item Limited to job level data
-        \item Time based, cant' be linked to an individual job
-        \item
-    \end{itemize}
-\end{frame}
-
-\section{Solutions to Size issues}
-\begin{frame}
-    \frametitle{ELK}
-    \begin{itemize}
-        \item Elasticsearch, Logstash, Kibana
-        \item \href{http://logstash.openstack.org}{http://logstash.openstack.org}
-        \item Provides a search engine on top of are job artifacts
-        \item Limited to 10 days of results
-    \end{itemize}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Elastic Recheck}
-    \begin{itemize}
-        \item Designed to answer the question ``Have you seen this recently?''
-        \item \href{http://status.openstack.org/elastic-recheck/}{http://status.openstack.org/elastic-recheck/}
-        \item
+        \item Jobレベルのデータに限定
+        \item 個別のJobへのリンクはできない
     \end{itemize}
 \end{frame}
 
 \begin{frame}
     \frametitle{Grafana}
     \begin{itemize}
-        \item \href{http://grafana.openstack.org/}{http://grafana.openstack.org/}
-        \item Provides a layer on top of graphite to easily make useful visualizations
-        \item Adds a number of dashboards
-        \item Some projects using this to track job failure rates
+        \item \href{http://grafana.openstack.org/}{grafana.openstack.org}
+        \item Graphiteに対するDashboard機能を提供 (簡単に視覚化できる)
+        \item 既にいくつかのダッシュボードが提供されている
+        \item 数プロジェクト（Neutron等）がJob失敗率視覚化に利用中
     \end{itemize}
 \end{frame}
 
+
+\section{Solutions to Size issues}
 \begin{frame}
-    \frametitle{subunit2sql}
+    \frametitle{ELK}
     \begin{itemize}
-        \item Designed to store test results data in a sql database
-        \item Provides a DB schema and a python API for interacting with the
-              database
-        \item Used to the results from test runs for 6 months
-        \item
+        \item Elasticsearch, Logstash, Kibana
+        \item \href{http://logstash.openstack.org}{logstash.openstack.org}
+        \item 大量のログファイルを検索する機能を提供
+        \item 10日間のログデータに制限
     \end{itemize}
 \end{frame}
 
 \begin{frame}
-    \frametitle{subunit2sql in OpenStack Infrastructure}
-    \begin{center}
-        \includegraphics[height=1.1\textheight]{subunit2sql-collection.png}
-    \end{center}
+  \frametitle{Elastic Recheck}
+  \begin{itemize}
+    \item 「このエラー前にも起きたよね？」という質問に答えるべく設計
+    \item \href{http://status.openstack.org/elastic-recheck/}{status.openstack.org/elastic-recheck}
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.9\textwidth]{elastic-recheck-sample.png}
+  \end{center}
 \end{frame}
 
 \begin{frame}
-    \frametitle{openstack-health}
-    \begin{itemize}
-        \item \href{http://status.openstack.org/openstack-health/\#/}{http://status.openstack.org/openstack-health/\#/}
-        \item Designed to be a single point of access for all the data about the gate
-        \item Currently can leverage subunit2sql and elastic-recheck
-    \end{itemize}
+  \frametitle{subunit2sql}
+  \begin{itemize}
+    \item テスト結果データをSQLデータベース (MySQL, PostgreSQL, SQLite)に保持する機能を提供
+    \item DBに保持したデータに対するPython APIを提供
+    \item ６ヶ月間の実行結果を保持（ゲート環境）
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-    \frametitle{OpenStack-Health Architecture}
-    \begin{center}
-        \includegraphics[height=1.2\textheight]{openstack-health-arch.png}
-    \end{center}
+  \frametitle{subunit2sql in OpenStackインフラ}
+  \begin{center}
+    \includegraphics[height=1.1\textheight]{subunit2sql-collection.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{openstack-health}
+  \begin{itemize}
+    \item \href{http://status.openstack.org/openstack-health/}{status.openstack.org/openstack-health}
+    \item ゲートの実行結果データをアクセスできるダッシュボードとして開発開始
+    \item subunit2sqlとelastic recheckのデータと連携
+  \end{itemize}
+  \begin{center}
+    \includegraphics[height=0.6\textheight]{openstack-health-1.png}
+    \includegraphics[height=0.6\textheight]{openstack-health-2.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{OpenStack-Health Architecture}
+  \begin{center}
+    \includegraphics[height=1.2\textheight]{openstack-health-arch.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{StackViz}
+  個々のCIビルド結果を視覚化するツール
+  \begin{itemize}
+    \item ソースコード：\href{http://git.openstack.org/cgit/openstack/stackviz}{git.openstack.org/cgit/openstack/stackviz}
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=1.3\textheight]{stackviz-sample-top.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \includegraphics[width=1.3\textheight]{stackviz-sample-timeline.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \includegraphics[width=1.3\textheight]{stackviz-sample-traceback.png}
+  \end{center}
 \end{frame}
 
 \section{Result}
 \begin{frame}
-    \frametitle{What did we get/improve?}
-    \begin{itemize}
-        \item
-    \end{itemize}
+  \frametitle{改善できたポイント}
+  \begin{itemize}
+    \item 全てのパッチに対してIntegrationテストを実行しており、破滅的な改変などを防いでいる
+    \item Job実行結果を俯瞰的に視覚化するにより、パフォーマンス劣化・改善を確認することができた
+    \item
+  \end{itemize}
 \end{frame}
 
 \section{Future work/issues}
-
 \begin{frame}
-    \frametitle{Issues}
-    \begin{itemize}
-        \item Too many varied data sources each with unique limitations
-        \item
-    \end{itemize}
+  \frametitle{課題}
+  \begin{itemize}
+    \item 非常に多くの種類のデータ・制限があり、効果的な見せ方が難しい
+    \item GateとPeriodicジョブのデータしか保持していない (subunit2sql/openstack-health)
+    \item インフラに起因するエラーが対象外 (subunit2sql/openstack-health)
+    \item 企業に所属する開発者のコントリビューションが得られにくい
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Future work}
+  \frametitle{Future work}
+  \begin{itemize}
+    \item openstack-health改善
     \begin{itemize}
-        \item Integrate all the things in openstack-health
-        \item
+      \item 全てのデータを見られるように
+      \item elastic recheckデータの更なる統合
+      \item zuulデータの統合
+      \item 単体テストカバレッジ推移
     \end{itemize}
+    \item 各種UIの改善
+    \item APIテスト実施状況 (カバレッジ)の把握
+  \end{itemize}
+\end{frame}
+
+\section{Summary}
+\begin{frame}
+  \frametitle{Summary}
+  \begin{itemize}
+    \item 活発な開発を維持するため、OpenStackアップストリーム開発ではCIが行われている
+    \item CIを支える各種ツールが開発・導入され運用されている
+    \begin{itemize}
+      \item graphite/grafana
+      \item Zuul (Gate)
+      \item elastic-recheck
+      \item subunit2sql
+      \item openstack-health
+      \item stackviz, etc.
+    \end{itemize}
+    \item OpenStack開発を支える、QAに興味がある開発者・支援者募集中！
+  \end{itemize}
+\end{frame}
+
+\section{Questions}
+\begin{frame}
+  \frametitle{Questions?}
 \end{frame}
 
 \subsection{More Information}
 \begin{frame}
 \frametitle{Where to get more information}
-    \begin{itemize}
-        \item openstack-dev ML\: \href{mailto:openstack-dev@lists.openstack.org}{openstack-dev@lists.openstack.org}
-        \item \#openstack-qa on Freenode
-        \item \href{http://git.openstack.org/cgit/openstack/openstack-health/}{http://git.openstack.org/cgit/openstack/openstack-health/}
-        \item \href{http://git.openstack.org/cgit/openstack-infra/subunit2sql}{http://git.openstack.org/cgit/openstack-infra/subunit2sql}
-        \item \href{http://git.openstack.org/cgit/openstack-infra/elastic-recheck/}{http://git.openstack.org/cgit/openstack-infra/elastic-recheck/}
-    \end{itemize}
+  \begin{itemize}
+    \item openstack-dev ML\: \href{mailto:openstack-dev@lists.openstack.org}{openstack-dev@lists.openstack.org}
+    \item \#openstack-qa on Freenode
+    \item \href{http://git.openstack.org/cgit/openstack/openstack-health/}{http://git.openstack.org/cgit/openstack/openstack-health/}
+    \item \href{http://git.openstack.org/cgit/openstack-infra/subunit2sql}{http://git.openstack.org/cgit/openstack-infra/subunit2sql}
+    \item \href{http://git.openstack.org/cgit/openstack-infra/elastic-recheck/}{http://git.openstack.org/cgit/openstack-infra/elastic-recheck/}
+  \end{itemize}
 \end{frame}
 
-\section{Questions}
-\begin{frame}
-\frametitle{Questions?}
-\end{frame}
-
+%\end{CJK*}{UTF8}{hiragino-elcapitan}
 %\end{CJK*}{UTF8}{genshingothic}
 \end{document}
