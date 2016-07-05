@@ -1,4 +1,5 @@
 \documentclass[aspectratio=169,11pt,hyperref={colorlinks=true}]{beamer}
+% https://github.com/zr-tex8r/BXcjkjatype/blob/master/README-ja.md
 \usepackage[whole]{bxcjkjatype}
 \usetheme{boxes}
 \setbeamertemplate{navigation symbols}{}
@@ -36,8 +37,21 @@
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 
+
 %\usepackage{CJK}
 %\pdfmapline{=genshingothic@Unicode@ <genshingothic.ttf}
+% bxcjkjatype
+%\setgothicfont[<ID>]{<フォントファイル名>}
+%\setgothicfont{/Users/foo/Library/Fonts/genshingothic.ttf}
+%\setgothicfont{/Users/foo/Library/Fonts/NotoSansCJKjp-Regular.otf}
+%\setgothicfont{/Users/foo/Downloads/genshingothic-20150607/GenShinGothic-P-Normal.ttf}
+%\setgothicfont{/Users/foo/Downloads/genshingothic-20150607/GenShinGothic-Regular.ttf}
+%\setgothicfont{hiragino.ttc}
+\setgothicfont{mplus-1p-regular.ttf}
+\setCJKfamilydefault{\gtdefault}
+%\setCJKfamilydefault{\mcdefault}
+%\CJKforce{abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ}
+
 
 \lstset{%
   backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
@@ -59,6 +73,7 @@
 }
 
 \setbeamerfont{caption}{series=\normalfont,size=\fontsize{6}{8}}
+%\setbeamerfont{caption}{series=\normalfont,size=\large}
 \setbeamertemplate{caption}{\raggedright\insertcaption\par}
 
 \setlength{\abovecaptionskip}{0pt}
